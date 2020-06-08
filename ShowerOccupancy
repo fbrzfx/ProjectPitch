@@ -1,0 +1,18 @@
+from gpiozero import MotionSensor
+import time
+import requests
+
+#setting the appropriate pin to read data from PIR
+pir = MotionSensor(4)
+
+#we add this in the event our code which runs from our Raspberry pi startup runs into errors, this gives us time to alter the text file before it executes.
+time.sleep(20)
+
+while True:
+	#FUNCTION FROM MOTIONSENSOR IMPORT TOT DETECT MOVEMENT
+	pir.wait_for_motion()
+	#request function from our import, posts event to our webhook via IFTTT
+	r = requests.post('https://maker.ifttt.com/trigger/PLACE_YOUR_EVENT_HERE/with/key/PLACE_YOUR_KEY_HERE', params={"value1":"none","value2":"none","value3":"none"})
+
+	#pauses the while loop so that ever minute the device is reset to detect any movement.
+	time.sleep(60)
